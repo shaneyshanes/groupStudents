@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  	<% include partials/head.ejs %>
+	  	<script src="javascripts/classes.js"></script>
+	</head>
+	<body>
+	    <div class="container-fluid">
+	    	<div class="row">
+	    		<div class="col-lg-3 col-md-3 sm-hidden xs-hidden"></div>
+    			
+    			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">	 
+    				<div class="page-header">
+
+    					<a id="logout" rel="<%= user._id %>" href="/logout" class="pull-right">Logout</a>
+
+					  	<h1><%= title %><br><small> A simple web app to sort your students into groups.</small></h1>
+					</div>   				
+    				<div class="row jumbotron">
+    					<h2><a onclick="toggle('#addClass'); $('#classInfo').hide();" href="javascript:void(0);">Add Class</a></h2>
+
+				    	<form class="form-horizontal" role="form" id="addClass">				    		
+						 	<div class="form-group">
+						 		<div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+							 		<label for="className">ClassName</label>
+							 		<input class="clearInput form-control" id="className" type="text" placeholder="Class name" autofocus/>
+						 		</div>						 							    	   	
+							</div>	
+
+							<button class="btn btn-default btn-mg" id="btnAddClass" type="button" onClick="addClass();">Add Class</button>	
+												
+						</form><!-- addClass -->
+
+						
+
+						<h2><a onclick="toggle('#classList')" href="javascript:void(0);">Class List</a></h2>
+				    	<div id="classList">
+				    		<form role="form">
+									<div class="form-group"> 
+										<label>Display by
+	  										<select class="form-control" id = "selectDisplay" onchange = "populateClassTable()">
+											  	<option class="sortAscending" value="className">Class Name</option>
+											  	<option class="sortDescending" value="classAverage">Class Average</option>										  	
+											</select>
+										</label>
+									</div>
+							</form>
+
+							<table class="table table-condensed table-responsive">
+								<thead>
+									<th> Class Name </th>
+									<th> Class Average </th>
+									<th> # of Students </th>
+									<th> Edit / Delete? </th>
+								</thead>
+
+								<tbody></tbody>
+							</table>
+
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-sm">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							        <h2 class="modal-title" id="myModalLabel">Edit Class Info</h2>
+							      </div>
+							      <div class="modal-body">
+
+							        <form class="form-horizontal" role="form" id="editClass">
+							    		
+									 	<div class="form-group">
+									 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+										 		<label for="className">Name</label>
+										 		<input class="clearInput form-control" id="editClassName" type="text" autofocus/>
+								 			</div>									 											    	
+										</div>	
+
+										<button class="btn btn-default btn-mg" id="btnEditClass" type="button" onClick="updateClassInfo(this);">Save Changes</button>
+										
+									</form><!-- addClass -->
+							      </div>								     
+							    </div>
+							  </div>
+							</div><!-- Modal -->
+
+
+				    	</div><!-- classList -->
+				    </div><!-- row -->
+			    </div>
+
+				<div class="col-lg-3 col-md-3 sm-hidden xs-hidden"></div>
+		    </div>
+	    </div><!-- container-fluid -->
+  
+	   
+	</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<% include partials/head.ejs %>
+  	<script src="javascripts/students.js"></script>
+   </head>
+	<body>
+	    <div class="container-fluid">
+	    	<div class="row">
+	    		<div class="col-lg-3 col-md-3 sm-hidden xs-hidden"></div>
+    			
+    			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">	 
+    				<div class="page-header">
+    					<p class="pull-right">
+    						<a id="back" rel="<%= user.currentClass %>" href="/classes"> Back to classes </a>	
+    						/
+    						<a id="logout" rel="<%= user._id %>" href="/logout"> Logout </a>     						
+    					</p> 	
+
+					  	<h1><%= title %><br><small> A simple web app to sort your students into groups.</small></h1>
+					  	
+					</div>   				
+    				<div class="row jumbotron">
+    					<div class="pull-right" id="studentInfo">
+				    		<h2> Student Info </h2>		    	
+					    		<strong>Name: </strong><span id="studentInfoName"></span><br>
+					    		<strong>Age: </strong><span id="studentInfoAge"></span><br>
+					    		<strong>Gender: </strong><span id="studentInfoGender"></span><br>
+					    		<strong>Class Average: </strong><span id="studentInfoClassAverage"></span><br>
+					    		<!--<strong>Ranking: </strong><span id="studentInfoRanking"></span><br>-->
+				    	</div><!-- studentInfo -->
+
+						<h2><a onclick="toggle('#addStudent'); $('#studentInfo').hide();" href="javascript:void(0);">Add Student</a></h2>
+
+				    	<form class="form-horizontal" role="form" id="addStudent">				    		
+						 	<div class="form-group">
+						 		<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">
+							 		<label for="studentName">Name</label>
+							 		<input class="clearInput form-control" id="studentName" type="text" placeholder="Student name" autofocus/>
+						 		</div>
+						 		<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">
+							 		<label for="studentAge">Age</label>
+							 		<input class="clearInput form-control" id="studentAge" min=1 type="number" placeholder="Age"/>  	
+						 		</div>
+						 		<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">
+							 		<label for="studentGender">Gender</label>
+							    	<select class="form-control clearInput" id="studentGender">
+									  	<option value="male">Male</option>
+									  	<option value="female">Female</option>										  	
+									</select>
+								</div>
+						 		<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">
+									<label for="studentClassAverage">Class Average</label>
+									<input class="clearInput form-control" id="studentClassAverage" min=0 type="number" placeholder="ClassAverage"/>
+								</div>
+						    	
+						    	   	
+							</div>	
+
+							<button class="btn btn-default btn-mg" id="btnAddStudent" type="button" onClick="addStudent();">Add Student</button>	
+												
+						</form><!-- addStudent -->
+
+						<h2><a onclick="toggle('#groupStudents'); toggle('#groupList');" href="javascript:void(0);">Group Students</a></h2>
+				    	<form id="groupStudents">
+						 	<div class="form-group">
+						 		
+
+						 		<div class="radio">
+								  	
+							    	<input id="homoRadio" type="radio" name="optionsRadios" value="homoRadio" checked>
+							    	<a href="#" data-toggle="tooltip" title="Smart kids in one group ... not-so-smart kids in another">
+								    	<label for="homoRadio">Group Homogeneously</label></a>
+								  	
+								</div>
+								<div class="radio">
+								  	
+							    	<input id="heteroRadio" type="radio" name="optionsRadios" value="heteroRadio">
+							    	<a href="#" data-toggle="tooltip" title="A nice mixture of skill ranges in each group">
+							    		<label for="heteroRadio">Group Heterogeneously</label></a>									    	 
+								  	
+								</div>		
+
+								<label for="studentNum">Students per group
+						 			<input class="clearInput form-control" id="studentNum" min=2 type="number" placeholder="Students per group"/>
+						 		</label>		
+
+						 		
+						    	<button id="btnGroupStudents" type="button" class="btn btn-default btn-mg" onClick="groupStudents();">Group Students</button>	    	
+						    	
+							</div>
+						</form><!-- groupStudents -->
+
+						<div id="groupList">
+				    		<table class="table table-condensed table-responsive">
+								<thead>
+									<th> Group </th>
+									<th> Students </th>
+									<!-- <th> Class Average </th> -->
+								</thead>
+								
+								<tbody></tbody>
+							</table>
+				    	</div><!-- groupList -->
+
+
+						<h2><a onclick="toggle('#studentList')" href="javascript:void(0);">Student List</a></h2>
+				    	<div id="studentList">
+				    		<form role="form">
+									<div class="form-group"> 
+										<label>Display by
+	  										<select class="form-control" id = "selectDisplay" onchange = "populateTable()">
+											  	<option class="sortAscending" value="studentName">Name</option>
+											  	<option class="sortDescending" value="classAverage">Class Average</option>										  	
+											</select>
+										</label>
+									</div>
+							</form>
+
+							<table class="table table-condensed table-responsive">
+								<thead>
+									<th> Student Name </th>
+									<th> Class Average </th>
+									<th> Edit / Delete? </th>
+								</thead>
+
+								<tbody></tbody>
+							</table>
+
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-lg">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							        <h2 class="modal-title" id="myModalLabel">Edit Student Info</h2>
+							      </div>
+							      <div class="modal-body">
+
+							        <form class="form-horizontal" role="form" id="editStudent">
+							    		
+									 	<div class="form-group">
+
+									 		<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">
+										 		<label for="studentName">Name</label>
+										 		<input class="clearInput form-control" id="editStudentName" type="text" autofocus/>
+								 			</div>
+									 		<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">		
+										 		<label for="studentAge">Age</label>
+										    	<input class="clearInput form-control" id="editStudentAge" min=1 type="number"/>
+											</div>
+											<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">	
+		  										<label for="studentGender">Gender</label>
+		  										<select class="form-control clearInput" id="editStudentGender">
+												  	<option value="Male">Male</option>
+												  	<option value="Female">Female</option>										  	
+												</select>
+											</div>
+											<div class="col-lg-3 col-md-6 col-sm-3 col-xs-6">
+										    	<label for="studentClassAverage">Class Average</label>	
+										    	<input class="clearInput form-control" id="editStudentClassAverage" min=0 type="number"/>
+								    		</div>
+									    	
+										</div>	
+
+										<button class="btn btn-default btn-mg" id="btnEditStudent" type="button" onClick="updateStudentInfo(this);">Save Changes</button>
+										
+									</form><!-- addStudent -->
+							      </div>								     
+							    </div>
+							  </div>
+							</div><!-- Modal -->
+
+
+				    	</div><!-- studentList -->
+				    </div><!-- row -->
+			    </div>
+
+				<div class="col-lg-3 col-md-3 sm-hidden xs-hidden"></div>
+		    </div>
+	    </div><!-- container-fluid -->
+  
+	   
+	</body>
+</html>

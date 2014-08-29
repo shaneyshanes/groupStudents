@@ -1,0 +1,41 @@
+body {
+  padding: 30px;
+  //font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+input {
+	margin-bottom: 7px;
+}
+
+select {
+	margin-bottom: 7px;
+}
+
+
+#studentInfo {
+	width:250px;
+}
+	
+	#studentInfo p {
+		padding:15px;
+		border:1px solid #CCC;
+	}
+
+#classInfo {
+	width:250px;
+}
+	
+	#classInfo p {
+		padding:15px;
+		border:1px solid #CCC;
+	}
+
+.grayBackground {
+	background-color: #BDBDBD;
+	color: #fff;
+}
+
+
+.noBackground {
+	background-color: #fff;
+}
